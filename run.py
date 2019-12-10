@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-#coding=utf8
+
 
 from __future__ import division
-import urllib
+import urllib.request
+import urllib.parse
 import time
 import json
 import sys
@@ -14,9 +15,9 @@ RESULT_FILE = path + "/" + "result.txt"
 def get_holiday():
 	str_time = time.strftime("%Y%m%d", time.localtime())
 	g_time = str_time
-	params = urllib.urlencode({'d':str_time})
-
-	f = urllib.urlopen("http://www.easybots.cn/api/holiday.php?%s" % params)
+	params = urllib.parse.urlencode({'d':str_time})
+	
+	f = urllib.request.urlopen("http://www.easybots.cn/api/holiday.php?d=%s" % params)
 
 	plain = f.read()
 
@@ -24,7 +25,7 @@ def get_holiday():
 	if not plain:
 		return 0
 
-#	print plain
+	print(plain)
 	decode = json.loads(plain)
 	if not decode:
 		return 0
@@ -32,10 +33,10 @@ def get_holiday():
 	return decode[str_time].encode("utf-8")
 
 def get_zhishu():
-	params = urllib.urlencode({'from':'pc','os_ver':'1','cuid':'xxx','vv':'100', \
+	params = urllib.parse.urlencode({'from':'pc','os_ver':'1','cuid':'xxx','vv':'100', \
 			'format':'json','stock_code':'sh000001','timestamp':int(time.time())})
 
-	f = urllib.urlopen("https://gupiao.baidu.com/api/rails/stockbasicbatch?%s" % params)
+	f = urllib.request.urlopen("https://gupiao.baidu.com/api/rails/stockbasicbatch?%s" % params)
 
 	plain = f.read()
 
@@ -43,7 +44,7 @@ def get_zhishu():
 	if not plain:
 		return 0
 
-	print plain
+	print(plain)
 	decode = json.loads(plain)
 
 	if not decode:
@@ -81,7 +82,7 @@ def record():
 def sendmail(title, content):
 	msg="sleep 3;echo \""+content+"\" |mutt -s \""+title+"\" stoneforfun@aliyun.com"
 	ret = os.system(msg)
-	print "my send mail ret %d"%ret
+	print("my send mail ret %d"%ret)
 
 def build_mail(val):
 	str_time = time.strftime("%Y%m%d", time.localtime())
@@ -121,14 +122,14 @@ def calc_avg(day):
 
 	val['dirta'] = val['avg'] - last
 	val['percent'] = round(val['dirta']*100/val['avg'], 2)
-	print "dirta:",val['dirta']," percent: ",val['percent']
+	print("dirta:",val['dirta']," percent: ",val['percent'])
 
 	return val
 
 
 holidy = get_holiday()
 
-print "holidy:",holidy,"=="
+print("holidy:",holidy,"==")
 if holidy != "0":
 	sys.exit()
 
@@ -141,13 +142,13 @@ val_short = {'maxday':8, 'threshold':2.3}
 #cacl avg, return avg and percent
 ret=calc_avg(val_short['maxday'])
 this_time = time.strftime("%Y/%m/%d", time.localtime())
-print "[",this_time,"] 8 days avg:",json.dumps(ret)
+print("[",this_time,"] 8 days avg:",json.dumps(ret))
 
 if type(ret) != dict:
 	sys.exit()
 
 if ret['percent'] >= val_short['threshold']:
-	#print 'sendmail'
-	build_mail(ret)
+	print('sendmail')
+	#build_mail(ret)
 
 
