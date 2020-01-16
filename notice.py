@@ -137,7 +137,7 @@ def get_ma5_ma10_ma20_fromqq(name, code):
         if rift_30_int + 0.02 < 0:
                 judge += "in"
 
-        if rift_5_int > rift_10_int and rift_10_int > rift_20_int:
+        if rift_5_int > rift_10_int and rift_10_int > rift_20_int and rift_20_int > 0:
                 judge = "out"
 
         ##################
@@ -159,5 +159,11 @@ print(get_ma5_ma10_ma20_fromqq('zhongruan','sz600536'))
 print(get_ma5_ma10_ma20_fromqq('zhongxing','sz000063'))
 print(get_ma5_ma10_ma20_fromqq('yiyuan','sh603236'))
 print(get_ma5_ma10_ma20_fromqq('changfei','sh601869'))
+print(get_ma5_ma10_ma20_fromqq('360','sh601360'))
+print(get_ma5_ma10_ma20_fromqq('qiming','sz002439'))
+print(get_ma5_ma10_ma20_fromqq('langchao','sz000977'))
+print(get_ma5_ma10_ma20_fromqq('wanmei','sz002624'))
+print(get_ma5_ma10_ma20_fromqq('37huyu','sz002555'))
+print(get_ma5_ma10_ma20_fromqq('zxjt','sh601066'))
 
 os.system('pause')
